@@ -135,7 +135,46 @@ return {
         lspconfig["prismals"].setup({})
       end,
       ["tailwindcss"] = function()
-        lspconfig["tailwindcss"].setup({})
+        lspconfig["tailwindcss"].setup({
+          settings = { -- Added because auto completion was not working in turborepo next project
+            tailwindCSS = {
+              classAttributes = { -- these are default values
+                "class",
+                "className",
+                "classList",
+                "ngClass",
+              },
+              includeLanguages = {
+                typescript = "javascript",
+                typescriptreact = "javascript",
+              },
+            },
+          },
+        })
+      end,
+      ["ts_ls"] = function()
+        lspconfig["ts_ls"].setup({ -- tsserver is still the underlying server
+          capabilities = capabilities,
+          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "jsx", "tsx" },
+          root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+        })
+      end,
+      ["gopls"] = function()
+        lspconfig["gopls"].setup({
+          capabilities = capabilities,
+          cmd = { "gopls" },
+          filetypes = { "go", "gomod", "gowork", "gotmpl" },
+          root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+          settings = {
+            gopls = {
+              completeUnimported = true,
+              usePlaceholders = true,
+              analyses = {
+                unusedparams = true,
+              },
+            },
+          },
+        })
       end,
     })
   end,
