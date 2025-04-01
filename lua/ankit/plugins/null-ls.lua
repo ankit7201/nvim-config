@@ -3,7 +3,7 @@ return {
   ft = "go",
   opts = function()
     local null_ls = require("null-ls")
-    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+    local augroup = vim.api.nvim_create_augroup("lspformatting", {})
     return {
       sources = {
         null_ls.builtins.formatting.gofmt,
@@ -11,12 +11,12 @@ return {
         null_ls.builtins.formatting.golines,
       },
       on_attach = function(client, bufnr)
-        if client.supports_method("textDocument/formatting") then
+        if client.supports_method("textdocument/formatting") then
           vim.api.nvim_clear_autocmds({
             group = augroup,
             buffer = bufnr,
           })
-          vim.api.nvim_create_autocmd("BufWritePre", {
+          vim.api.nvim_create_autocmd("bufwritepre", {
             group = augroup,
             buffer = bufnr,
             callback = function()
