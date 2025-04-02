@@ -167,8 +167,8 @@ return {
           root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
           settings = {
             gopls = {
-              completeunimported = true,
-              useplaceholders = true,
+              completeUnimported = true,
+              usePlaceholders = true,
               analyses = {
                 unusedparams = true,
                 unusedvariables = true,

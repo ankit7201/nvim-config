@@ -3,20 +3,27 @@ return {
   ft = "go",
   opts = function()
     local null_ls = require("null-ls")
-    local augroup = vim.api.nvim_create_augroup("lspformatting", {})
+    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+    local gopath = vim.fn.trim(vim.fn.system("go env GOPATH"))
+    local gobin = gopath .. "/bin"
+
     return {
       sources = {
         null_ls.builtins.formatting.gofmt,
-        null_ls.builtins.formatting.goimports_reviser,
-        null_ls.builtins.formatting.golines,
+        null_ls.builtins.formatting.goimports_reviser.with({
+          command = gobin .. "/goimports-reviser",
+        }),
+        null_ls.builtins.formatting.golines.with({
+          command = gobin .. "/golines",
+        }),
       },
       on_attach = function(client, bufnr)
-        if client.supports_method("textdocument/formatting") then
+        if client.supports_method("textDocument/formatting") then
           vim.api.nvim_clear_autocmds({
             group = augroup,
             buffer = bufnr,
           })
-          vim.api.nvim_create_autocmd("bufwritepre", {
+          vim.api.nvim_create_autocmd("BufWritePre", {
             group = augroup,
             buffer = bufnr,
             callback = function()
